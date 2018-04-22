@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Animated, Easing, View, StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 
+const wall = 186;
+
 export default class App extends Component {
   constructor() {
     super();
@@ -12,7 +14,7 @@ export default class App extends Component {
       deltaX: 1,
       deltaY: 1.3,
       next: { x: 200, y: 160 },
-      speed: 1000,
+      speed: 500,
     };
   }
   render() {
@@ -41,11 +43,7 @@ export default class App extends Component {
     );
   }
   componentWillMount() {
-    Animated.timing(this.state.vec, {
-      toValue: { x: 0, y: 130 },
-      duration: 1000,
-      ease: Easing.linear,
-    }).start(() => this.bounce(this.state.next));
+    this.bounce({ x: 0, y: 85 });
   }
   bounce(nextXY) {
     this.setState({
@@ -58,17 +56,11 @@ export default class App extends Component {
     const startY = nextXY.y;
     const velocity = this.state.speed;
 
-    if (startX == 0) {
-      newDeltaX = newDeltaX - newDeltaX * 2;
+    if (startX == 0 || startX == wall) {
+      newDeltaX -= newDeltaX * 2;
     }
-    if (startX == 186) {
-      newDeltaX = newDeltaX - newDeltaX * 2;
-    }
-    if (startY == 0) {
-      newDeltaY = newDeltaY - newDeltaY * 2;
-    }
-    if (startY == 186) {
-      newDeltaY = newDeltaY - newDeltaY * 2;
+    if (startY == 0 || startY == wall) {
+      newDeltaY -= newDeltaY * 2;
     }
     var newX = startX;
     var newY = startY;
@@ -79,12 +71,12 @@ export default class App extends Component {
         newY = 0;
         break;
       }
-      if (newY > 186) {
-        newY = 186;
+      if (newY > wall) {
+        newY = wall;
         break;
       }
-      if (newX > 186) {
-        newX = 186;
+      if (newX > wall) {
+        newX = wall;
         break;
       }
       if (newX < 0) {
