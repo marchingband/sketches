@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
-import { Animated, Button, Easing, Slider, View, StyleSheet } from 'react-native';
+import {
+  Animated,
+  Button,
+  Easing,
+  Slider,
+  View,
+  StyleSheet,
+} from 'react-native';
 import { Constants } from 'expo';
 
 const wall = 186;
+const speedSetting = 3;
 
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
       vec: new Animated.ValueXY({ x: 75, y: 100 }),
-      aldX:100,
-      oldY:100,
+      aldX: 100,
+      oldY: 100,
       lastX: 100,
       lastY: 100,
       deltaX: 1,
       deltaY: 1.3,
       next: { x: 200, y: 160 },
       speed: 500,
-      podX:100,
-      boxColor:'black'
+      podX: 100,
+      boxColor: 'black',
     };
   }
   render() {
@@ -44,43 +52,43 @@ export default class App extends Component {
           />
           <View
             style={{
-              position:'absolute',
-              height:5,
-              width:40,
+              position: 'absolute',
+              height: 5,
+              width: 40,
               borderColor: 'red',
               borderWidth: 2,
               top: 195,
               left: this.state.podX,
-            }}/>
+            }}
+          />
         </View>
-        <View style={{width:200}}>
-        <Slider
-          step={1}
-          maximumValue={156}
-          minumumValue={0}
-          onValueChange={this.change.bind(this)}
-          
-        />
+        <View style={{ width: 200 }}>
+          <Slider
+            step={1}
+            maximumValue={156}
+            minumumValue={0}
+            onValueChange={this.change.bind(this)}
+          />
         </View>
-        <Button title='start' onPress={()=>this.start()}/>
+        <Button title="start" onPress={() => this.start()} />
       </View>
     );
   }
-  start(){
+  start() {
     this.setState({
       vec: new Animated.ValueXY({ x: 75, y: 100 }),
-      aldX:100,
-      oldY:100,
+      aldX: 100,
+      oldY: 100,
       lastX: 100,
       lastY: 100,
       deltaX: 1,
       deltaY: 1.3,
       next: { x: 200, y: 160 },
       speed: 500,
-      podX:100,
-      boxColor:'black'
-    })
-    this.bounce({ x: 0, y: 85 })
+      podX: 100,
+      boxColor: 'black',
+    });
+    this.bounce({ x: 0, y: 85 });
   }
   change(value) {
     this.setState(() => {
@@ -89,14 +97,14 @@ export default class App extends Component {
       };
     });
   }
-  endGame(){
-    this.setState({boxColor:'red'})
-    Animated.timing(this.state.vec).stop()
+  endGame() {
+    this.setState({ boxColor: 'red' });
+    Animated.timing(this.state.vec).stop();
   }
   bounce(nextXY) {
     this.setState({
-      oldX:this.state.lastX,
-      oldY:this.state.lastY,
+      oldX: this.state.lastX,
+      oldY: this.state.lastY,
       lastX: nextXY.x,
       lastY: nextXY.y,
     });
@@ -135,7 +143,7 @@ export default class App extends Component {
       }
     }
     var distance = Math.abs(newX - startX) + Math.abs(newY - startY);
-    var nextSpeed = distance * 4;
+    var nextSpeed = distance * speedSetting;
     this.setState({
       deltaX: newDeltaX,
       deltaY: newDeltaY,
@@ -148,20 +156,22 @@ export default class App extends Component {
       toValue: { x: nextXY.x, y: nextXY.y },
       duration: velocity,
       easing: Easing.linear,
-    }).start(() => this.test(this.state.oldX,this.state.oldY,{ x: newX, y: newY }));
+    }).start(() =>
+      this.test(this.state.oldX, this.state.oldY, { x: newX, y: newY })
+    );
   }
-  test=(x,y,next)=>{
-    if(y==wall){
-      var podX=this.state.podX
-      if(Math.abs(podX-x)>30)
-        {
-        this.endGame()}else{
-          this.bounce({x:next.x,y:next.y})
-        }
-    }else{
-      this.bounce({x:next.x,y:next.y})
+  test = (x, y, next) => {
+    if (y == wall) {
+      var podX = this.state.podX;
+      if (x < podX || x - podX > 40) {
+        this.endGame();
+      } else {
+        this.bounce({ x: next.x, y: next.y });
+      }
+    } else {
+      this.bounce({ x: next.x, y: next.y });
     }
-  }
+  };
 }
 
 const styles = StyleSheet.create({
