@@ -90,7 +90,7 @@ class Box extends Component {
       }
     }
     const distance = Math.abs(XY.x - newX) + Math.abs(XY.y - newY);
-    const newDuration = distance * 10 - size;
+    const newDuration = distance * 10 + size;
     Animated.timing(this.state.vec, {
       toValue: { x: newX, y: newY },
       duration: newDuration,
