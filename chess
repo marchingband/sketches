@@ -12,8 +12,20 @@ class Square extends Component {
   const textColor = color=='white' || color=='black' ? color : 'grey'
   const scale = active ? 1.5 : 1
   const backgroundColor = active ? 'orange' : 'grey'
+  const zIndex = active ? 2 : 1
     return (
-      <View style={[styles.square,{backgroundColor:backgroundColor}, {borderColor:border},{transform:[{translateX:panX},{translateY:panY},{scaleX:scale},{scaleY:scale}]}]}>
+      <View style={[styles.square, 
+                  {zIndex:zIndex}, 
+                  {backgroundColor:backgroundColor}, 
+                  {borderColor:border},
+                  {transform:[
+                      {translateX:panX},
+                      {translateY:panY},
+                      {scaleX:scale},
+                      {scaleY:scale}
+                    ]}
+                  ]}
+      >
         <Text style={{color:textColor}}>{id}</Text>
       </View>
     )
@@ -100,11 +112,10 @@ export default class App extends Component {
   }
   handlePanResponderEnd=(e,gestureState)=>{
     const touch=this.findSquareAt(gestureState.x0,gestureState.y0)
-    var board = this.state.board
+    const {board} = this.state
     if(touch>0 && touch<65){
       board[touch].active=false
       board[touch].pan={x:0,y:0}
-      this.setState({board})
     }
     this.setState({pan:{x:0,y:0}})
   }
@@ -117,9 +128,6 @@ export default class App extends Component {
   moveSelected=()=>{
     const {pan,touch,board} = this.state
     board[touch].pan=pan
-  }
-  resetSelected=()=>{
-
   }
   render() {
     return (
