@@ -7,12 +7,10 @@ class Square extends Component {
   render(){
   const{id,pressSquare}=this.props
     return (
-      <View style={styles.square}>
-        <TouchableOpacity onPress={()=>{pressSquare(id)}}>
-          <Text>{id}</Text>
-        </TouchableOpacity>
-      </View>
-      )
+      <TouchableOpacity style={styles.square} onPress={()=>{pressSquare(id)}}>
+        <Text>{id}</Text>
+      </TouchableOpacity>
+    )
   }
 }
 
@@ -22,7 +20,7 @@ class Row extends Component {
       <View style={styles.row}>
         {this.props.children}
       </View>
-      )
+    )
   }
 }
 
@@ -30,12 +28,12 @@ class Board extends Component {
   render(){
     const {board} = this.props
     return(
-        <View>
-          {this.renderBoard(board)}
-        </View>
-      )
+      <View style={styles.board}>
+        {this._renderBoard(board)}
+      </View>
+    )
   }
-  renderBoard=(board)=>{
+  _renderBoard=(board)=>{
     const {pressSquare}=this.props
     var rows=[]
     for(var i=0;i<8;i++){
@@ -56,18 +54,13 @@ export default class App extends Component {
       touch:0,
     }
   }
-  pressSquare=(id)=>{
-    this.setState({touch:id})
-  }
-  getPiece=(id)=>{
-    return this.state.board[id-1]
+  pressSquare=(touch)=>{
+    this.setState({touch})
   }
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.board} >
-          <Board board={this.state.board} pressSquare={this.pressSquare}/>
-        </View>
+      <View style={styles.container}>\
+        <Board board={this.state.board} pressSquare={this.pressSquare}/>
         <Text>{this.state.touch}</Text>
       </View>
     );
